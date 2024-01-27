@@ -9,14 +9,15 @@ public class CameraEffectDrunk : MonoBehaviour, ICameraEffect
 
     public Vector2 CameraPosition { get; private set; } = Vector2.zero;
     public float CameraRotation { get; private set; } = 0f;
+    public float CameraSizeScale { get; } = 1f;
 
     private float _timer;
 
     public Vector2 positionDelta = new Vector2(0.2f, 0.2f);
+    public float positionSpeed = 1f;
+
 
     public float rotationDelta = 1f;
-
-    public float positionSpeed = 1f;
 
     public float rotationSpeed = 1f;
 

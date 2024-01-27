@@ -8,6 +8,7 @@ public interface ICameraEffect
     float Weight { get; set; }
     Vector2 CameraPosition { get; }
     float CameraRotation { get; }
+    float CameraSizeScale { get; }
 }
 
 public enum CameraEffect
@@ -25,6 +26,7 @@ public class CameraController : MonoBehaviour
         public float Weight { get; set; } = 0f;
         public Vector2 CameraPosition { get; } = Vector2.zero;
         public float CameraRotation { get;} = 0f;
+        public float CameraSizeScale { get; } = 1f;
     }
 
     public Camera mainCamera;
@@ -77,18 +79,23 @@ public class CameraController : MonoBehaviour
     public void TeleportToIntro()
     {
         this.mainCamera.transform.position = this.introCamera.transform.position;
+        this.mainCamera.orthographicSize = this.introCamera.orthographicSize;
     }
 
     public void GoToIntro()
     {
-        var target = this.introCamera.transform.position;
-        this.mainCamera.transform.DOMove(target, this.transitionTime).SetEase(Ease.InOutSine);
+        var targetPos = this.introCamera.transform.position;
+        var targetSize = this.introCamera.orthographicSize;
+        this.mainCamera.transform.DOMove(targetPos, this.transitionTime).SetEase(Ease.InOutSine);
+        this.mainCamera.DOOrthoSize(targetSize, this.transitionTime).SetEase(Ease.InOutSine);
+        
     }
 
     public void GoToGameplay()
     {
-        var target = this.gameplayCamera.transform.position;
-        this.mainCamera.transform.DOMove(target, this.transitionTime).SetEase(Ease.InOutSine);
+        var targetPos = this.gameplayCamera.transform.position;
+        this.mainCamera.transform.DOMove(targetPos, this.transitionTime).SetEase(Ease.InOutSine);
+        this.mainCamera.DOOrthoSize(this.gameplayCamera.orthographicSize, this.transitionTime).SetEase(Ease.InOutSine);
     }
 
     
@@ -160,5 +167,8 @@ public class CameraController : MonoBehaviour
 
         this._cameraContainer.localPosition = new Vector3(pos.x, pos.y, this._cameraContainer.localPosition.z);
         this._cameraContainer.localRotation = Quaternion.Euler(0, 0, rot);
+
+        var camBaseSize = this.gameplayCamera.orthographicSize;
+        this.mainCamera.orthographicSize = camBaseSize * this._currentCameraEffect.CameraSizeScale;;
     }
 }
