@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ExtractionObject : MonoBehaviour
+public class Item : MonoBehaviour
 {
     [SerializeField]
     private bool _isDragging = false;
@@ -65,6 +65,8 @@ public class ExtractionObject : MonoBehaviour
         Console.WriteLine("Collision!");
 
         if (!this._canLostLife) return;
+
+        this._canLostLife = false;
 
         // Find whether the parent has the LevelBlock component
         var levelBlock = this.GetComponentInParent<LevelBlock>();
