@@ -169,6 +169,8 @@ public class CameraController : MonoBehaviour
 
         if (this._isInGameplay)
         {
+            this._currentCameraEffect.Time += UnityEngine.Time.deltaTime;
+
             var currentPos = this._currentCameraEffect.CameraPosition;
             var previousPos = this._previousCameraEffect.CameraPosition;
             var pos = Vector2.Lerp(previousPos, currentPos, this._currentCameraEffect.Weight);
