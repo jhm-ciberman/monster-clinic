@@ -37,10 +37,6 @@ public class CameraController : MonoBehaviour
     public Camera introCamera;
     public Camera gameplayCamera;
 
-
-    [SerializeField]
-    private Camera[] _floorCameras;
-
     public float transitionTime = 4f;
 
     public float cameraEffectTransitionTime = 1f;
@@ -48,6 +44,11 @@ public class CameraController : MonoBehaviour
     private bool _isInGameplay = false;
 
     public PostProcessVolume volume;
+
+    [SerializeField]
+    private float _cameraMovementVerticalSpeed = 2f;
+
+    private bool _isCameraMoving = false;
 
 
     private ICameraEffect _currentCameraEffect;
@@ -91,11 +92,6 @@ public class CameraController : MonoBehaviour
 
         this.introCamera.gameObject.SetActive(false);
         this.gameplayCamera.gameObject.SetActive(false);
-
-        for (int i = 0; i < this._floorCameras.Length; i++)
-        {
-            this._floorCameras[i].gameObject.SetActive(false);
-        }
     }
 
     public void TeleportToIntro()
@@ -103,6 +99,11 @@ public class CameraController : MonoBehaviour
         this._baseCameraPosition = this.introCamera.transform.position;
         this._baseCameraOrthoSize = this.introCamera.orthographicSize;
         this._isInGameplay = false;
+    }
+
+    public void StartMovement()
+    {
+        this._isCameraMoving = true;
     }
 
     private void GoToCamera(Camera camera, Action onComplete = null)
@@ -131,11 +132,9 @@ public class CameraController : MonoBehaviour
         this.GoToCamera(this.introCamera, () => this._isInGameplay = false);
     }
 
-    public void GoToGameplay(int floorIndex, Action onComplete = null)
+    public void GoToGameplay(Action onComplete = null)
     {
-        var camera = this._floorCameras[floorIndex - 1];
-
-        this.GoToCamera(camera, () =>
+        this.GoToCamera(this.gameplayCamera, () =>
         {
             this._isInGameplay = true;
             onComplete?.Invoke();
@@ -202,7 +201,13 @@ public class CameraController : MonoBehaviour
             this.CameraEffect = CameraEffect.Mushrooms;
         }
 
-        this._currentCameraEffect.Time += UnityEngine.Time.deltaTime;
+        this._currentCameraEffect.Time += Time.deltaTime;
+
+        if (this._isCameraMoving)
+        {
+            this._baseCameraPosition += new Vector3(0, this._cameraMovementVerticalSpeed * Time.deltaTime, 0);
+        }
+
 
         var currentPos = this._currentCameraEffect.CameraPosition;
         var previousPos = this._previousCameraEffect.CameraPosition;

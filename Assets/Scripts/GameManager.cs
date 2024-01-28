@@ -14,8 +14,6 @@ public class GameManager : MonoBehaviour
 
     private int _livesCount = 3;
 
-    private int _currentLevel = 0;
-
     public void Start()
     {
         Instance = this;
@@ -24,31 +22,22 @@ public class GameManager : MonoBehaviour
 
         DOVirtual.DelayedCall(2f, () =>
         {
-            this.cameraController.GoToGameplay(1,
+            this.cameraController.GoToGameplay(
                 () => itemPreview.StartAnimation()
             );
         });
-
     }
 
-    public void OnLevelComplete(int level)
+    public void OnWin()
     {
-        if (level <= this._currentLevel) return;
-        this._currentLevel = level;
-
-        if (level == 4)
-        {
-            Debug.Log("You win!!");
-            this.cameraController.GoToIntro();
-            return;
-        }
-
-        this.cameraController.GoToGameplay(level);
+        Debug.Log("You win!!");
+        this.cameraController.GoToIntro();
     }
 
     private void ItemPreview_AnimationCompleted(object sender, EventArgs e)
     {
-        
+        // Start game
+        this.cameraController.StartMovement();
     }
 
     public void NotifyPlayerDied()

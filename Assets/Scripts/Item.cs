@@ -62,8 +62,8 @@ public class Item : MonoBehaviour
     public void OnCollisionEnter2D(Collision2D collision)
     {
         this._isDragging = false;
-        Console.WriteLine("Collision!");
-
+        Debug.Log("Collision!");
+        Debug.Log(collision.gameObject.name);
         if (!this._canLostLife) return;
 
         this._canLostLife = false;
