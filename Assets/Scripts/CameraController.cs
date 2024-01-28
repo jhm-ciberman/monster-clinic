@@ -38,6 +38,8 @@ public class CameraController : MonoBehaviour
 
     public float cameraEffectTransitionTime = 1f;
 
+    private bool _isInGameplay = false;
+
     public PostProcessVolume volume;
 
 
@@ -70,16 +72,17 @@ public class CameraController : MonoBehaviour
         this._cameraEffectIntoxicated.Weight = 0f;
         this._cameraEffectMushrooms.Weight = 0f;
 
+        this.TeleportToIntro();
+
         this.introCamera.gameObject.SetActive(false);
         this.gameplayCamera.gameObject.SetActive(false);
-
-        this.TeleportToIntro();
     }
 
     public void TeleportToIntro()
     {
         this.mainCamera.transform.position = this.introCamera.transform.position;
         this.mainCamera.orthographicSize = this.introCamera.orthographicSize;
+        this._isInGameplay = false;
     }
 
     public void GoToIntro()
@@ -87,15 +90,19 @@ public class CameraController : MonoBehaviour
         var targetPos = this.introCamera.transform.position;
         var targetSize = this.introCamera.orthographicSize;
         this.mainCamera.transform.DOMove(targetPos, this.transitionTime).SetEase(Ease.InOutSine);
-        this.mainCamera.DOOrthoSize(targetSize, this.transitionTime).SetEase(Ease.InOutSine);
+        this.mainCamera.DOOrthoSize(targetSize, this.transitionTime).SetEase(Ease.InOutSine)
+            .OnComplete(() => this._isInGameplay = false);
         
     }
 
     public void GoToGameplay()
     {
         var targetPos = this.gameplayCamera.transform.position;
+        var targetSize = this.gameplayCamera.orthographicSize;
+        Debug.Log(this.mainCamera.orthographicSize);
         this.mainCamera.transform.DOMove(targetPos, this.transitionTime).SetEase(Ease.InOutSine);
-        this.mainCamera.DOOrthoSize(this.gameplayCamera.orthographicSize, this.transitionTime).SetEase(Ease.InOutSine);
+        this.mainCamera.DOOrthoSize(targetSize, this.transitionTime).SetEase(Ease.InOutSine)
+            .OnComplete(() => this._isInGameplay = true);
     }
 
     
@@ -157,18 +164,21 @@ public class CameraController : MonoBehaviour
             this.CameraEffect = CameraEffect.Mushrooms;
         }
 
-        var currentPos = this._currentCameraEffect.CameraPosition;
-        var previousPos = this._previousCameraEffect.CameraPosition;
-        var pos = Vector2.Lerp(previousPos, currentPos, this._currentCameraEffect.Weight);
+        if (this._isInGameplay)
+        {
+            var currentPos = this._currentCameraEffect.CameraPosition;
+            var previousPos = this._previousCameraEffect.CameraPosition;
+            var pos = Vector2.Lerp(previousPos, currentPos, this._currentCameraEffect.Weight);
 
-        var currentRot = this._currentCameraEffect.CameraRotation;
-        var previousRot = this._previousCameraEffect.CameraRotation;
-        var rot = Mathf.Lerp(previousRot, currentRot, this._currentCameraEffect.Weight);
+            var currentRot = this._currentCameraEffect.CameraRotation;
+            var previousRot = this._previousCameraEffect.CameraRotation;
+            var rot = Mathf.Lerp(previousRot, currentRot, this._currentCameraEffect.Weight);
 
-        this._cameraContainer.localPosition = new Vector3(pos.x, pos.y, this._cameraContainer.localPosition.z);
-        this._cameraContainer.localRotation = Quaternion.Euler(0, 0, rot);
+            this._cameraContainer.localPosition = new Vector3(pos.x, pos.y, this._cameraContainer.localPosition.z);
+            this._cameraContainer.localRotation = Quaternion.Euler(0, 0, rot);
 
-        var camBaseSize = this.gameplayCamera.orthographicSize;
-        this.mainCamera.orthographicSize = camBaseSize * this._currentCameraEffect.CameraSizeScale;;
+            var camBaseSize = this.gameplayCamera.orthographicSize;
+            this.mainCamera.orthographicSize = camBaseSize * this._currentCameraEffect.CameraSizeScale;
+        }
     }
 }
