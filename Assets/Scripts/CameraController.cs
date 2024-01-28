@@ -41,7 +41,6 @@ public class CameraController : MonoBehaviour
 
     public float cameraEffectTransitionTime = 1f;
 
-    private bool _isInGameplay = false;
 
     public PostProcessVolume volume;
 
@@ -98,7 +97,6 @@ public class CameraController : MonoBehaviour
     {
         this._baseCameraPosition = this.introCamera.transform.position;
         this._baseCameraOrthoSize = this.introCamera.orthographicSize;
-        this._isInGameplay = false;
     }
 
     public void StartMovement()
@@ -129,16 +127,12 @@ public class CameraController : MonoBehaviour
 
     public void GoToIntro()
     {
-        this.GoToCamera(this.introCamera, () => this._isInGameplay = false);
+        this.GoToCamera(this.introCamera);
     }
 
     public void GoToGameplay(Action onComplete = null)
     {
-        this.GoToCamera(this.gameplayCamera, () =>
-        {
-            this._isInGameplay = true;
-            onComplete?.Invoke();
-        });
+        this.GoToCamera(this.gameplayCamera, () => onComplete?.Invoke());
     }
 
     
@@ -184,19 +178,19 @@ public class CameraController : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             this.CameraEffect = CameraEffect.None;
         }
-        else if (Input.GetKeyDown(KeyCode.W))
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             this.CameraEffect = CameraEffect.Drunk;
         }
-        else if (Input.GetKeyDown(KeyCode.E))
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             this.CameraEffect = CameraEffect.Intoxicated;
         }
-        else if (Input.GetKeyDown(KeyCode.R))
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
         {
             this.CameraEffect = CameraEffect.Mushrooms;
         }
@@ -217,11 +211,18 @@ public class CameraController : MonoBehaviour
         var previousRot = this._previousCameraEffect.CameraRotation;
         var rot = Mathf.Lerp(previousRot, currentRot, this._currentCameraEffect.Weight);
 
+        var currentScale = this._currentCameraEffect.CameraSizeScale;
+        var previousScale = this._previousCameraEffect.CameraSizeScale;
+        var scale = Mathf.Lerp(previousScale, currentScale, this._currentCameraEffect.Weight);
+
         var cameraTransform = this.mainCamera.transform;
         cameraTransform.localPosition = this._baseCameraPosition + new Vector3(pos.x, pos.y, this._cameraContainer.localPosition.z);
         cameraTransform.localRotation = Quaternion.Euler(0, 0, rot);
+        this.mainCamera.orthographicSize = this._baseCameraOrthoSize * scale;
+    }
 
-        this.mainCamera.orthographicSize = this._baseCameraOrthoSize * this._currentCameraEffect.CameraSizeScale;
-
+    internal void StopMovement()
+    {
+        this._isCameraMoving = false;
     }
 }

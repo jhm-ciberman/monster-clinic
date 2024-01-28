@@ -52,6 +52,6 @@ public class CameraEffectMushrooms : MonoBehaviour, ICameraEffect
 
         this._colorGrading.hueShift.value += UnityEngine.Time.deltaTime * this.hueShiftSpeed;
 
-        this.CameraSizeScale = 1f + this.cameraSizeScaleDelta + Mathf.Sin(this.Time * this.cameraSizeScaleSpeed) * this.cameraSizeScaleDelta;
+        this.CameraSizeScale = 1f + Mathf.Sin(this.Time * this.cameraSizeScaleSpeed) * this.cameraSizeScaleDelta;
     }
 }

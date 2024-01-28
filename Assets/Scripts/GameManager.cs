@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class GameManager : MonoBehaviour
 
     public ItemPreview itemPreview;
 
-    private int _livesCount = 3;
+    private bool _playerWon = false;
 
     public void Start()
     {
@@ -30,8 +31,11 @@ public class GameManager : MonoBehaviour
 
     public void OnWin()
     {
-        Debug.Log("You win!!");
+        if (this._playerWon) return;
+        this._playerWon = true;
+
         this.cameraController.GoToIntro();
+        this.cameraController.StopMovement();
     }
 
     private void ItemPreview_AnimationCompleted(object sender, EventArgs e)
@@ -42,12 +46,19 @@ public class GameManager : MonoBehaviour
 
     public void NotifyPlayerDied()
     {
-        this._livesCount--;
-        Debug.Log($"Lives: {this._livesCount}");
+        Debug.Log("Game Over!");
+    }
 
-        if (this._livesCount <= 0)
+    private void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
         {
-            Debug.Log("Game Over!");
+            this.Restart();
         }
     }
 }
