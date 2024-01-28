@@ -6,25 +6,27 @@ public class ItemPreview : MonoBehaviour
 {
 
     public event EventHandler AnimationCompleted;
-
-    public void Start()
+    
+    public void Awake()
     {
+        this.gameObject.SetActive(false);
+    }
+
+    public void StartAnimation()
+    {
+        
+        this.gameObject.SetActive(true);
+
         // Go from botton to the center of the screen, shake a little (angle only), and then go back to the bottom
-
-        float initialY = -12;
-
-        var target = this.transform.position;
-        target.y = initialY;
-
-        this.transform.position = target;
+        var position = this.transform.position;
 
         this.transform
-            .DOMoveY(0, 1f)
+            .DOMoveY(position.y + 7f, 1f)
             .SetEase(Ease.OutBack)
             .OnComplete(() => this.transform
                 .DOShakeRotation(1, new Vector3(0, 0, 10), 10, 90, false)
                 .OnComplete(() => this.transform
-                    .DOMoveY(initialY, 1f)
+                    .DOMoveY(position.y, 1f)
                     .SetEase(Ease.InBack)
                     .OnComplete(() => this.AnimationCompleted?.Invoke(this, EventArgs.Empty))
                 )

@@ -36,7 +36,12 @@ public class CameraController : MonoBehaviour
     // Only as reference for position
     public Camera introCamera;
     public Camera gameplayCamera;
-    public float transitionTime = 2.5f;
+
+
+    [SerializeField]
+    private Camera[] _floorCameras;
+
+    public float transitionTime = 4f;
 
     public float cameraEffectTransitionTime = 1f;
 
@@ -60,7 +65,12 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     public CameraEffectMushrooms _cameraEffectMushrooms;
 
+
     private Transform _cameraContainer;
+
+    private Vector3 _baseCameraPosition;
+
+    private float _baseCameraOrthoSize;
 
     public void Start()
     {
@@ -74,37 +84,62 @@ public class CameraController : MonoBehaviour
         this._cameraEffectIntoxicated.Weight = 0f;
         this._cameraEffectMushrooms.Weight = 0f;
 
+        this._baseCameraOrthoSize = this.mainCamera.orthographicSize;
+        this._baseCameraPosition = this.mainCamera.transform.localPosition;
+
         this.TeleportToIntro();
 
         this.introCamera.gameObject.SetActive(false);
         this.gameplayCamera.gameObject.SetActive(false);
+
+        for (int i = 0; i < this._floorCameras.Length; i++)
+        {
+            this._floorCameras[i].gameObject.SetActive(false);
+        }
     }
 
     public void TeleportToIntro()
     {
-        this.mainCamera.transform.position = this.introCamera.transform.position;
-        this.mainCamera.orthographicSize = this.introCamera.orthographicSize;
+        this._baseCameraPosition = this.introCamera.transform.position;
+        this._baseCameraOrthoSize = this.introCamera.orthographicSize;
         this._isInGameplay = false;
+    }
+
+    private void GoToCamera(Camera camera, Action onComplete = null)
+    {
+        var targetPos = camera.transform.position;
+        var targetSize = camera.orthographicSize;
+
+        DOTween.To(
+            () => this._baseCameraPosition,
+            (x) => this._baseCameraPosition = x,
+            targetPos,
+            this.transitionTime
+        ).SetEase(Ease.InOutSine);
+            
+        DOTween.To(
+            () => this._baseCameraOrthoSize,
+            (x) => this._baseCameraOrthoSize = x,
+            targetSize,
+            this.transitionTime
+        ).SetEase(Ease.InOutSine)
+        .OnComplete(() => onComplete?.Invoke());
     }
 
     public void GoToIntro()
     {
-        var targetPos = this.introCamera.transform.position;
-        var targetSize = this.introCamera.orthographicSize;
-        this.mainCamera.transform.DOMove(targetPos, this.transitionTime).SetEase(Ease.InOutSine);
-        this.mainCamera.DOOrthoSize(targetSize, this.transitionTime).SetEase(Ease.InOutSine)
-            .OnComplete(() => this._isInGameplay = false);
-        
+        this.GoToCamera(this.introCamera, () => this._isInGameplay = false);
     }
 
-    public void GoToGameplay()
+    public void GoToGameplay(int floorIndex, Action onComplete = null)
     {
-        var targetPos = this.gameplayCamera.transform.position;
-        var targetSize = this.gameplayCamera.orthographicSize;
-        Debug.Log(this.mainCamera.orthographicSize);
-        this.mainCamera.transform.DOMove(targetPos, this.transitionTime).SetEase(Ease.InOutSine);
-        this.mainCamera.DOOrthoSize(targetSize, this.transitionTime).SetEase(Ease.InOutSine)
-            .OnComplete(() => this._isInGameplay = true);
+        var camera = this._floorCameras[floorIndex - 1];
+
+        this.GoToCamera(camera, () =>
+        {
+            this._isInGameplay = true;
+            onComplete?.Invoke();
+        });
     }
 
     
@@ -167,24 +202,21 @@ public class CameraController : MonoBehaviour
             this.CameraEffect = CameraEffect.Mushrooms;
         }
 
-        if (this._isInGameplay)
-        {
-            this._currentCameraEffect.Time += UnityEngine.Time.deltaTime;
+        this._currentCameraEffect.Time += UnityEngine.Time.deltaTime;
 
-            var currentPos = this._currentCameraEffect.CameraPosition;
-            var previousPos = this._previousCameraEffect.CameraPosition;
-            var pos = Vector2.Lerp(previousPos, currentPos, this._currentCameraEffect.Weight);
+        var currentPos = this._currentCameraEffect.CameraPosition;
+        var previousPos = this._previousCameraEffect.CameraPosition;
+        var pos = Vector2.Lerp(previousPos, currentPos, this._currentCameraEffect.Weight);
 
-            var currentRot = this._currentCameraEffect.CameraRotation;
-            var previousRot = this._previousCameraEffect.CameraRotation;
-            var rot = Mathf.Lerp(previousRot, currentRot, this._currentCameraEffect.Weight);
+        var currentRot = this._currentCameraEffect.CameraRotation;
+        var previousRot = this._previousCameraEffect.CameraRotation;
+        var rot = Mathf.Lerp(previousRot, currentRot, this._currentCameraEffect.Weight);
 
-            var gameplayCamera = this.gameplayCamera;
-            var cameraTransform = this.mainCamera.transform;
-            cameraTransform.localPosition = gameplayCamera.transform.localPosition + new Vector3(pos.x, pos.y, this._cameraContainer.localPosition.z);
-            cameraTransform.localRotation = gameplayCamera.transform.localRotation * Quaternion.Euler(0, 0, rot);
+        var cameraTransform = this.mainCamera.transform;
+        cameraTransform.localPosition = this._baseCameraPosition + new Vector3(pos.x, pos.y, this._cameraContainer.localPosition.z);
+        cameraTransform.localRotation = Quaternion.Euler(0, 0, rot);
 
-            this.mainCamera.orthographicSize = gameplayCamera.orthographicSize * this._currentCameraEffect.CameraSizeScale;
-        }
+        this.mainCamera.orthographicSize = this._baseCameraOrthoSize * this._currentCameraEffect.CameraSizeScale;
+
     }
 }
