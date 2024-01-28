@@ -13,6 +13,13 @@ public class Item : MonoBehaviour
 
     private bool _canLostLife = false;
 
+    private Rigidbody2D _rb;
+
+    public void Start()
+    {
+        this._rb = this.GetComponent<Rigidbody2D>();
+    }
+
     public void Update()
     {
         if (this._isMouseOver && Input.GetMouseButtonDown(0))
@@ -25,6 +32,11 @@ public class Item : MonoBehaviour
             this.EndDrag();
         }
 
+
+    }
+
+    public void FixedUpdate()
+    {
         if (this._isDragging)
         {
             this.Drag();
@@ -46,7 +58,7 @@ public class Item : MonoBehaviour
     {
         var pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         pos.z = 0;
-        this.transform.position = pos;
+        this._rb.MovePosition(pos);
     }
 
     public void OnMouseEnter()
