@@ -5,6 +5,7 @@ using System;
 
 public interface ICameraEffect
 {
+    public float Time { get; set; }
     float Weight { get; set; }
     Vector2 CameraPosition { get; }
     float CameraRotation { get; }
@@ -27,6 +28,7 @@ public class CameraController : MonoBehaviour
         public Vector2 CameraPosition { get; } = Vector2.zero;
         public float CameraRotation { get;} = 0f;
         public float CameraSizeScale { get; } = 1f;
+        public float Time { get; set; } = 0f;
     }
 
     public Camera mainCamera;
@@ -127,6 +129,7 @@ public class CameraController : MonoBehaviour
                 _ => throw new NotImplementedException()
             };
 
+            this._currentCameraEffect.Time = 0f;
             Debug.Log($"Switching to {this._currentCameraEffect.GetType().Name}");
 
             DOTween.To(
@@ -174,11 +177,12 @@ public class CameraController : MonoBehaviour
             var previousRot = this._previousCameraEffect.CameraRotation;
             var rot = Mathf.Lerp(previousRot, currentRot, this._currentCameraEffect.Weight);
 
-            this._cameraContainer.localPosition = new Vector3(pos.x, pos.y, this._cameraContainer.localPosition.z);
-            this._cameraContainer.localRotation = Quaternion.Euler(0, 0, rot);
+            var gameplayCamera = this.gameplayCamera;
+            var cameraTransform = this.mainCamera.transform;
+            cameraTransform.localPosition = gameplayCamera.transform.localPosition + new Vector3(pos.x, pos.y, this._cameraContainer.localPosition.z);
+            cameraTransform.localRotation = gameplayCamera.transform.localRotation * Quaternion.Euler(0, 0, rot);
 
-            var camBaseSize = this.gameplayCamera.orthographicSize;
-            this.mainCamera.orthographicSize = camBaseSize * this._currentCameraEffect.CameraSizeScale;
+            this.mainCamera.orthographicSize = gameplayCamera.orthographicSize * this._currentCameraEffect.CameraSizeScale;
         }
     }
 }

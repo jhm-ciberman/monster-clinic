@@ -10,8 +10,7 @@ public class CameraEffectDrunk : MonoBehaviour, ICameraEffect
     public Vector2 CameraPosition { get; private set; } = Vector2.zero;
     public float CameraRotation { get; private set; } = 0f;
     public float CameraSizeScale { get; } = 1f;
-
-    private float _timer;
+    public float Time { get; set; } = 0f;
 
     public Vector2 positionDelta = new Vector2(0.2f, 0.2f);
     public float positionSpeed = 1f;
@@ -45,16 +44,14 @@ public class CameraEffectDrunk : MonoBehaviour, ICameraEffect
 
         if (this.Weight == 0) return;
 
-        this._timer += Time.deltaTime;
-
         this.CameraPosition = new Vector2(
-            Mathf.Sin(this._timer * this.positionSpeed) * this.positionDelta.x,
-            Mathf.Sin(this._timer * this.positionSpeed) * this.positionDelta.y
+            Mathf.Sin(this.Time * this.positionSpeed) * this.positionDelta.x,
+            Mathf.Sin(this.Time * this.positionSpeed) * this.positionDelta.y
         );
 
-        this.CameraRotation = Mathf.Sin(this._timer * this.rotationSpeed) * this.rotationDelta;
+        this.CameraRotation = Mathf.Sin(this.Time * this.rotationSpeed) * this.rotationDelta;
 
-        var distortion = this.distortionBase + Mathf.Sin(this._timer * this.distortionSpeed) * this.distortionDelta;
+        var distortion = this.distortionBase + Mathf.Sin(this.Time * this.distortionSpeed) * this.distortionDelta;
 
         this._lensDistortion.intensity.value = distortion;
     }

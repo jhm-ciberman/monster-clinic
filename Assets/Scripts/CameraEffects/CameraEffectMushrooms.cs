@@ -10,6 +10,7 @@ public class CameraEffectMushrooms : MonoBehaviour, ICameraEffect
     public Vector2 CameraPosition { get; private set; } = Vector2.zero;
     public float CameraRotation { get; private set; } = 0f;
     public float CameraSizeScale { get; private set; } = 1f;
+    public float Time { get; set; } = 0f;
 
     public Vector2 positionDelta = new Vector2(0.2f, 0.2f);
 
@@ -27,7 +28,6 @@ public class CameraEffectMushrooms : MonoBehaviour, ICameraEffect
 
     private ColorGrading _colorGrading;
 
-    private float _timer;
 
     public void Start()
     {
@@ -43,17 +43,15 @@ public class CameraEffectMushrooms : MonoBehaviour, ICameraEffect
 
         if (this.Weight == 0) return;
 
-        this._timer += Time.deltaTime;
-
         this.CameraPosition = new Vector2(
-            Mathf.Sin(this._timer * this.positionSpeed) * this.positionDelta.x,
-            Mathf.Sin(this._timer * this.positionSpeed) * this.positionDelta.y
+            Mathf.Sin(this.Time * this.positionSpeed) * this.positionDelta.x,
+            Mathf.Sin(this.Time * this.positionSpeed) * this.positionDelta.y
         );
 
-        this.CameraRotation = Mathf.Sin(this._timer * this.rotationSpeed) * this.rotationDelta;
+        this.CameraRotation = Mathf.Sin(this.Time * this.rotationSpeed) * this.rotationDelta;
 
-        this._colorGrading.hueShift.value += Time.deltaTime * this.hueShiftSpeed;
+        this._colorGrading.hueShift.value += UnityEngine.Time.deltaTime * this.hueShiftSpeed;
 
-        this.CameraSizeScale = 1f + this.cameraSizeScaleDelta + Mathf.Sin(this._timer * this.cameraSizeScaleSpeed) * this.cameraSizeScaleDelta;
+        this.CameraSizeScale = 1f + this.cameraSizeScaleDelta + Mathf.Sin(this.Time * this.cameraSizeScaleSpeed) * this.cameraSizeScaleDelta;
     }
 }
