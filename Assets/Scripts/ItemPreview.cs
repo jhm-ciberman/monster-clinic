@@ -11,7 +11,7 @@ public class ItemPreview : MonoBehaviour
     {
         // Go from botton to the center of the screen, shake a little (angle only), and then go back to the bottom
 
-        float initialY = -8;
+        float initialY = -12;
 
         var target = this.transform.position;
         target.y = initialY;
