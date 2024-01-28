@@ -293,7 +293,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0, g: 0.645283, b: 0.49919268, a: 1}
+  m_BackGroundColor: {r: 0.17768781, g: 0.31132078, b: 0.18405129, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -5415,7 +5415,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 696, y: -609}
+  m_AnchoredPosition: {x: 1552, y: -482}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &636055768
@@ -5439,7 +5439,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "specialized in stomach extractions and also cartoons.\n and circus at
-    night !"
+    night!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2f8a74f5a57170a4c86354d578f6ab0b, type: 2}
   m_sharedMaterial: {fileID: 9084339865160037794, guid: 2f8a74f5a57170a4c86354d578f6ab0b, type: 2}
@@ -5448,8 +5448,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4279056397
-  m_fontColor: {r: 0.050980397, g: 0.21960786, b: 0.050980397, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5466,8 +5466,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 80
-  m_fontSizeBase: 80
+  m_fontSize: 66.6
+  m_fontSizeBase: 66.6
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -5502,7 +5502,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -1061.0339, y: 0, z: -478.0288, w: -64.06561}
+  m_margin: {x: -993.9761, y: -107.6458, z: 458.71292, w: -114.99443}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -5564,7 +5564,7 @@ RectTransform:
   m_GameObject: {fileID: 705319243}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.89396, y: 0.89396, z: 0.89396}
+  m_LocalScale: {x: 1.0361891, y: 1.0361891, z: 1.0361891}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 636055767}
@@ -5572,7 +5572,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 477}
+  m_AnchoredPosition: {x: 0, y: 412}
   m_SizeDelta: {x: 2048, y: 2048}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &705319245
@@ -6042,12 +6042,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 799.97, y: 2171}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96

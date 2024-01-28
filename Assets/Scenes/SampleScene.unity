@@ -1371,7 +1371,7 @@ MonoBehaviour:
   transitionTime: 2.5
   cameraEffectTransitionTime: 1
   volume: {fileID: 0}
-  _cameraMovementVerticalSpeed: 0.5
+  _cameraMovementVerticalSpeed: 1
   _cameraEffectDrunk: {fileID: 1862554020}
   _cameraEffectIntoxicated: {fileID: 604568038}
   _cameraEffectMushrooms: {fileID: 1321320589}
@@ -4034,7 +4034,7 @@ MonoBehaviour:
   - {fileID: 1589701197}
   - {fileID: 1473895890}
   - {fileID: 1454552657}
-  activationTimeLimit: 15
+  activationTimeLimit: 5
 --- !u!4 &1836883268
 Transform:
   m_ObjectHideFlags: 0
@@ -4095,9 +4095,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf83dc3cb43f08244b19d7639d063a28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positionDelta: {x: 0.3, y: 0.2}
-  positionSpeed: 1.8
-  rotationDelta: 2.3
+  positionDelta: {x: 0.35, y: 0.4}
+  positionSpeed: 2.61
+  rotationDelta: 2.99
   rotationSpeed: 1
   distortionBase: 18
   distortionDelta: 12
