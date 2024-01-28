@@ -22,6 +22,8 @@ public class GameManager : MonoBehaviour
 
     private GameState _gameState = GameState.Intro;
 
+    public Distractores distractores;
+
     private CameraEffect[] _cameraEffects = new CameraEffect[]
     {
         CameraEffect.Intoxicated,
@@ -85,6 +87,11 @@ public class GameManager : MonoBehaviour
     public void NotifyPlayerDied()
     {
         Debug.Log("Game Over!");
+
+        foreach (var distractor in this.distractors)
+        {
+            distractor.StopAnimation();
+        }
 
         DOVirtual.DelayedCall(2f, () =>
         {

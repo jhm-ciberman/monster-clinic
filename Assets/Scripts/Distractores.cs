@@ -10,6 +10,11 @@ public class Distractores : MonoBehaviour
     private void Start()
     {
         // Start the coroutine to activate random objects
+        
+    }
+
+    public void StartAnimation()
+    {
         StartCoroutine(ActivateRandomObject());
     }
 
