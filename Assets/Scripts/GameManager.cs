@@ -74,6 +74,8 @@ public class GameManager : MonoBehaviour
         this.cameraController.GoToIntro();
         this.cameraController.StopMovement();
 
+        this.distractores.StopDistractor();
+
         this.cameraController.CameraEffect = CameraEffect.None;
     }
 
@@ -82,16 +84,15 @@ public class GameManager : MonoBehaviour
         // Start game
         this._gameState = GameState.Gameplay;
         this.cameraController.StartMovement();
+
+        this.distractores.StartDistractor();
     }
 
     public void NotifyPlayerDied()
     {
         Debug.Log("Game Over!");
 
-        foreach (var distractor in this.distractors)
-        {
-            distractor.StopAnimation();
-        }
+        this.distractores.StartDistractor();
 
         DOVirtual.DelayedCall(2f, () =>
         {

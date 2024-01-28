@@ -1818,7 +1818,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.334
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -2766,6 +2766,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraController: {fileID: 519420033}
   itemPreview: {fileID: 8999222}
+  distractores: {fileID: 1836883267}
 --- !u!4 &1345750598
 Transform:
   m_ObjectHideFlags: 0
@@ -4028,11 +4029,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   distracciones:
+  - {fileID: 298179651}
+  - {fileID: 1039159802}
   - {fileID: 1589701197}
   - {fileID: 1473895890}
   - {fileID: 1454552657}
-  - {fileID: 298179651}
-  - {fileID: 1039159802}
   activationTimeLimit: 15
 --- !u!4 &1836883268
 Transform:
