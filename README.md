@@ -1,5 +1,7 @@
 # Monster Hospital
 
+![hero_image](https://github.com/jhm-ciberman/monster-hospital/assets/7988351/7620adb6-c5dc-4b8d-80b3-c44154fe1198)
+
 Monster hospital, specialized in stomach extractions and also cartoons and circus at night.
 
 This is a short game made in 48 hours for the Global Game Jam 2024
